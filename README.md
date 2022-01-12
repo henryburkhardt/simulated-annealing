@@ -1,1 +1,1 @@
-# simulate-annealing
+# simulated-annealing
