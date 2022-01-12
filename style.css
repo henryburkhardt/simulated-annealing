@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap');
+
+html, body{
+    background-color: black;
+    height: 100%;
+    margin: 0;
+    color: white;
+    font-family:'Source Code Pro';
+}
+
+.flex-container {
+    display: flex;
+}
+
+.flex-child {
+    flex: 1;
+}  
+
+.flex-child:first-child {
+    margin-right: 20px;
+   
+} 
+
+
+
+input{
+    font-family:'Source Code Pro';
+}
