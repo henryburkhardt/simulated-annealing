@@ -3,6 +3,7 @@ let width, height, depth;
 let temp = 100;
 let cam;
 let angle = 0;
+let time = 0;
 
 class Point{
     constructor(){
@@ -69,7 +70,7 @@ function cost(system){
     return(totalDist);
 }
 
-//local optimization 
+//local optimization - takes a system (array of Points) as input and returns one step of LO process.
 function localOptimization(system){
     guess = getNeighbor(system);
     delta = cost(system) - cost(guess);
@@ -80,10 +81,10 @@ function localOptimization(system){
     return(system);
 }
 
-//simulated annealing
+//simulated annealing. Takes a system as input and returns on step of the SA process.
 function simulatedAnnealing(system){
-    if(temp > 0){
-        for(let i = 0; i < 2; i++){
+    if(temp > 0.00005){
+        for(let i = 0; i < 100; i++){
             let guess = getNeighbor(system);
             delta = cost(guess) - cost(system);
             if(delta < 0){
@@ -94,7 +95,7 @@ function simulatedAnnealing(system){
                 }
             }
         }
-        temp = 0.9*temp;
+        temp = 0.90*temp;
         document.getElementById('pathLength').innerHTML = Math.floor(cost(system));
         document.getElementById('totalCombos').innerHTML = temp;
     }
@@ -115,6 +116,7 @@ function setup(){
 
     current_system = createSystem(60);
     setComplexity(60);
+    frameRate(60);
 }
 
 function setComplexity(){
@@ -126,10 +128,19 @@ function setComplexity(){
 }
 
 function draw(){
+    //p5 camera orbit controls
     background(0);
-    camera(2*Math.PI*Math.cos(angle)*width/4, 100 + 2*Math.PI*Math.sin(angle)*width/4, 100);
-    angle = angle + 0.005;
+    let cameraX = Math.cos(time*2*Math.PI)*width;
+    let cameraY = Math.sin(time*2*Math.PI)*height;
+    c = camera(cameraX, cameraY, 700);
+    time += 0.001;
+
+    
     orbitControl();
+
+    console.log(c)
+
+    //show current system and update if running.
     showSystem(current_system);
     if(run){
         current_system = simulatedAnnealing(current_system);
