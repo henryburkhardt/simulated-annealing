@@ -24,6 +24,14 @@ function setRun(arg){
     run = arg;
 }
 
+function setComplexity(){
+    if(!run){
+        let complexity = document.getElementById("slider").value;
+        current_system = createSystem(complexity);
+        document.getElementById('complexityOutput').innerHTML = complexity;
+    }   
+}
+
 function getNeighbor(system){
     let neighbor = system.slice();
     let i1 = Math.floor(Math.random()*neighbor.length);
@@ -46,6 +54,7 @@ function createSystem(complexity){
     return(system);
 }
 
+//draw the current system to the p5 canvas
 function showSystem(system){
     for(let p of system){
         p.show();
@@ -59,6 +68,7 @@ function showSystem(system){
     }
 }
 
+//calculates the cost (distance between points) of a system
 function cost(system){
     let totalDist = 0;
     for(let i = 1; i < system.length; i++){
@@ -102,6 +112,7 @@ function simulatedAnnealing(system){
     return(system);
 }
 
+
 function setup(){
     let scale = 20;
     width = windowHeight-scale; 
@@ -116,15 +127,8 @@ function setup(){
 
     current_system = createSystem(60);
     setComplexity(60);
-    frameRate(60);
-}
 
-function setComplexity(){
-    if(!run){
-        let complexity = document.getElementById("slider").value;
-        current_system = createSystem(complexity);
-        document.getElementById('complexityOutput').innerHTML = complexity;
-    }   
+    document.getElementById('totalCombos').innerHTML = temp;
 }
 
 function draw(){
@@ -134,11 +138,6 @@ function draw(){
     let cameraY = Math.sin(time*2*Math.PI)*height;
     c = camera(cameraX, cameraY, 700);
     time += 0.001;
-
-    
-    orbitControl();
-
-    console.log(c)
 
     //show current system and update if running.
     showSystem(current_system);
