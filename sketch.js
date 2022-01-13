@@ -1,10 +1,9 @@
 let run = false;
 let width, height, depth;
 let temp = 100;
-let cam;
-let angle = 0;
 let time = 0;
 
+/*Class defining spheres in the system.*/
 class Point{
     constructor(){
         this.pos = createVector(0,0,0);
@@ -32,15 +31,7 @@ function setComplexity(){
     }   
 }
 
-function getNeighbor(system){
-    let neighbor = system.slice();
-    let i1 = Math.floor(Math.random()*neighbor.length);
-    let i2 = Math.floor(Math.random()*neighbor.length);
-    [neighbor[i1], neighbor[i2]] = [neighbor[i2], neighbor[i1]];
-    return(neighbor);
-}
-
-
+/*Creates and returns an ordered array of Points, given complexity (number of Points).*/
 function createSystem(complexity){
     let system = [];
     for(let i = 0; i < complexity; i++){
@@ -54,7 +45,16 @@ function createSystem(complexity){
     return(system);
 }
 
-//draw the current system to the p5 canvas
+/* Returns the "neighbor" of a system (a random swap of two Points), given a system. */
+function getNeighbor(system){
+    let neighbor = system.slice();
+    let i1 = Math.floor(Math.random()*neighbor.length);
+    let i2 = Math.floor(Math.random()*neighbor.length);
+    [neighbor[i1], neighbor[i2]] = [neighbor[i2], neighbor[i1]];
+    return(neighbor);
+}
+
+/*Draw the current system to the p5 canvas.*/
 function showSystem(system){
     for(let p of system){
         p.show();
@@ -68,7 +68,7 @@ function showSystem(system){
     }
 }
 
-//calculates the cost (distance between points) of a system
+/*Calculates the cost (distance between points) of a system.*/
 function cost(system){
     let totalDist = 0;
     for(let i = 1; i < system.length; i++){
@@ -80,7 +80,7 @@ function cost(system){
     return(totalDist);
 }
 
-//local optimization - takes a system (array of Points) as input and returns one step of LO process.
+/*Local Optimization. Given a system as input, returns one step of LO process.*/
 function localOptimization(system){
     guess = getNeighbor(system);
     delta = cost(system) - cost(guess);
@@ -91,7 +91,7 @@ function localOptimization(system){
     return(system);
 }
 
-//simulated annealing. Takes a system as input and returns on step of the SA process.
+/*Simulated Annealing. Given a system as input, returns one step of the SA process.*/
 function simulatedAnnealing(system){
     if(temp > 0.00005){
         for(let i = 0; i < 100; i++){
@@ -112,7 +112,6 @@ function simulatedAnnealing(system){
     return(system);
 }
 
-
 function setup(){
     let scale = 20;
     width = windowHeight-scale; 
@@ -123,23 +122,21 @@ function setup(){
     canvas.style('display', 'block');
     canvas.parent('canvas');
     background(0);
-    camera(0,0,1000);
 
-    current_system = createSystem(60);
     setComplexity(60);
-
+    current_system = createSystem(60);
     document.getElementById('totalCombos').innerHTML = temp;
 }
 
 function draw(){
-    //p5 camera orbit controls
+    /*p5 camera orbit controls*/
     background(0);
     let cameraX = Math.cos(time*2*Math.PI)*width;
     let cameraY = Math.sin(time*2*Math.PI)*height;
-    c = camera(cameraX, cameraY, 700);
+    camera(cameraX, cameraY, 700);
     time += 0.001;
 
-    //show current system and update if running.
+    /*show current system and update if running.*/
     showSystem(current_system);
     if(run){
         current_system = simulatedAnnealing(current_system);
