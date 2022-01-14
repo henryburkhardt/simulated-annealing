@@ -7,7 +7,7 @@ let time = 0;
 class Point{
     constructor(){
         this.pos = createVector(0,0,0);
-        this.radius = 18;
+        this.radius = 15;
     }
 
     show(){
@@ -28,7 +28,15 @@ function setComplexity(){
         let complexity = document.getElementById("slider").value;
         current_system = createSystem(complexity);
         document.getElementById('complexityOutput').innerHTML = complexity;
-    }   
+    }
+}
+
+function reset(){
+    run = false; 
+    current_system = createSystem(60);
+    temp = 100;
+    document.getElementById("slider").value = 60;
+
 }
 
 /*Creates and returns an ordered array of Points, given complexity (number of Points).*/
@@ -66,6 +74,9 @@ function showSystem(system){
         strokeWeight(1);
         line(x1, y1, z1, x2, y2, z2);
     }
+    document.getElementById('pathLength').innerHTML = Math.floor(cost(system));
+    document.getElementById('totalCombos').innerHTML = temp;
+    // document.getElementById('complexityOutput').innerHTML = complexity;
 }
 
 /*Calculates the cost (distance between points) of a system.*/
@@ -87,14 +98,13 @@ function localOptimization(system){
     if (delta > 0){
         system = guess;
     }
-    document.getElementById('pathLength').innerHTML = Math.floor(cost(system));
     return(system);
 }
 
 /*Simulated Annealing. Given a system as input, returns one step of the SA process.*/
 function simulatedAnnealing(system){
     if(temp > 0.00005){
-        for(let i = 0; i < 100; i++){
+        for(let i = 0; i < 1; i++){
             let guess = getNeighbor(system);
             delta = cost(guess) - cost(system);
             if(delta < 0){
@@ -105,9 +115,7 @@ function simulatedAnnealing(system){
                 }
             }
         }
-        temp = 0.90*temp;
-        document.getElementById('pathLength').innerHTML = Math.floor(cost(system));
-        document.getElementById('totalCombos').innerHTML = temp;
+        temp = 0.95*temp;
     }
     return(system);
 }

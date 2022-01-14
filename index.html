@@ -17,11 +17,11 @@
             <p>PATH LENGTH: <span id='pathLength'></span></p>
             <p>TEMPERATURE: <span id='totalCombos'></span> degrees</p>
             <p>POINTS: <span id='complexityOutput'></span></p>
-            <input type="range" min="2" max="200" value="60" class="slider" id="slider" onchange="setComplexity()">
-            <input type="button" value="SET" onclick="set()">
+            <input type="range" min="2" max="200" value="60" class="slider" id="slider">
+            <input type="button" value="SET" onclick="setComplexity()">
             <br><br>
-            <input type="button" value="START" onclick="setRun(true)">
-            <input type="button" value="STOP" onclick="setRun(false)">
+            <input type="button" value="GO" onclick="setRun(true)">
+            <input type="button" value="RESET" onclick="reset()">
         </div>  
     </div>
 </body>
